@@ -31,7 +31,7 @@ func (todos *Todos) add(title string) {
 func (todos *Todos) validateIndex(index int) error {
 
 	if index < 0 || index >= len(*todos) {
-		err := errors.New("Invalid Index")
+		err := errors.New("invalid index")
 		fmt.Println(err)
 		return err
 	}
@@ -49,6 +49,41 @@ func (todos *Todos) delete(index int) error {
 	}
 
 	*todos = append(t[:index], t[index+1:]...)
+
+	return nil
+
+}
+
+func (todos *Todos) toggle(index int) error {
+
+	t := *todos
+
+	if err := t.validateIndex(index); err != nil {
+		return err
+	}
+
+	isCompleted := t[index].Completed
+
+	if !isCompleted {
+		completionTime := time.Now()
+		t[index].CompletedAt = &completionTime
+	}
+
+	t[index].Completed = !isCompleted
+
+	return nil
+
+}
+
+func (todos *Todos) edit(index int, title string) error {
+
+	t := *todos
+
+	if err := t.validateIndex(index); err != nil {
+		return err
+	}
+
+	t[index].Title = title
 
 	return nil
 

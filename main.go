@@ -4,6 +4,11 @@ import "fmt"
 
 func main() {
 
-	fmt.Println("running in the main file")
+	todos := Todos{}
+	todos.add("Pray for grace")
+	todos.add("Ask the holy spirit for guidiance")
+	fmt.Printf("%+v\n\n\n", todos)
+	todos.delete(0)
+	fmt.Printf("%+v\n", todos)
 
 }
