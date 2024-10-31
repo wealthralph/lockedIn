@@ -3,6 +3,9 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/aquasecurity/table"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -86,5 +89,29 @@ func (todos *Todos) edit(index int, title string) error {
 	t[index].Title = title
 
 	return nil
+
+}
+
+func (todos *Todos) print() {
+	t := table.New(os.Stdout)
+	t.SetRowLines(false)
+	t.SetHeaders("#", "Title", "Completed", "Created At", "Completed At")
+
+	for index, todo := range *todos {
+		completed := "❌"
+		completedAt := ""
+
+		if todo.Completed {
+			completed = "✅"
+			if todo.CompletedAt != nil {
+				completedAt = todo.CompletedAt.Format(time.RFC1123)
+			}
+		}
+
+		t.AddRow(strconv.Itoa(index), todo.Title, completed, todo.CreatedAt.Format(time.RFC1123), completedAt)
+
+	}
+
+	t.Render()
 
 }
